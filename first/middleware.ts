@@ -5,5 +5,5 @@ export function middleWare(req: Request, res: Response, next: NextFunction) {
     next();
   const endTime = Date.now();
 
-  console.log(`Time it took ${endTime - startTime}ms`);
+  console.log(`Time it took ${endTime - startTime}ms for ${req.method} methond for the route ${req.path}`);
 }
