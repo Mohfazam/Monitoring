@@ -31,7 +31,7 @@ const requestCountMiddleware = (req: Request, res: Response, next: NextFunction)
 
 
 const app = express();
-app.use(middleWare);
+// app.use(middleWare);
 app.get("/cpu", (req, res) => {
     
     for(let i = 0; i < 1000000; i++){
@@ -54,9 +54,11 @@ app.get("/users", (req, res) => {
     });
 });
 
-app.get("/metric", (req, res) => {
-
-})
+app.get("/metric", async (req, res) => {
+    const metrics = await client.register.metrics();
+    res.set('Content-Type', client.register.contentType);
+    res.end(metrics)
+});
 
 app.listen(3000, () => {
     "Server Started"
