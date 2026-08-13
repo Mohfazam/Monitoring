@@ -25,6 +25,10 @@ app.get("/users", (req, res) => {
     });
 });
 
+app.get("/metric", (req, res) => {
+    
+})
+
 app.listen(3000, () => {
     "Server Started"
 });
