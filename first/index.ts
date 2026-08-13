@@ -32,7 +32,9 @@ const requestCountMiddleware = (req: Request, res: Response, next: NextFunction)
         });
     });
 
+    res.on("close", () => {
     activeRequestGauge.dec();
+  });
 
     next();
 };
@@ -41,11 +43,13 @@ const requestCountMiddleware = (req: Request, res: Response, next: NextFunction)
 
 const app = express();
 app.use(requestCountMiddleware);
-app.get("/cpu", (req, res) => {
+app.get("/cpu", async (req, res) => {
+
+    await new Promise(s => setTimeout(s, 5000));
     
-    for(let i = 0; i < 1000000; i++){
-        let x = Math.random() + 87979797 * 99999 * Math.random();
-    }
+    // for(let i = 0; i < 1000000; i++){
+    //     let x = Math.random() + 87979797 * 99999 * Math.random();
+    // }
 
     
 
