@@ -1,5 +1,30 @@
 import express  from "express";
-import { middleWare } from "./middleware";
+
+import type { Request, Response, NextFunction } from "express";
+
+import promClient from "prom-client"
+import client from "prom-client"
+
+function middleWare(req: Request, res: Response, next: NextFunction) {
+  const startTime = Date.now();
+    res.on("finish", () => {
+        const endTime = Date.now();
+
+        console.log(`Time it took ${endTime - startTime}ms for ${req.method} methond for the route ${req.path} with status ${res.statusCode}`);
+    });
+
+
+    next();
+    
+
+}
+
+const requestsCounter = new client.Counter({
+    name: 'http_requests_total',
+    help: 'Total Number of HTTP requests',
+    labelNames: ['method', 'route', 'status_code']
+});
+
 
 const app = express();
 app.use(middleWare);
@@ -26,7 +51,7 @@ app.get("/users", (req, res) => {
 });
 
 app.get("/metric", (req, res) => {
-    
+
 })
 
 app.listen(3000, () => {
