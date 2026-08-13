@@ -12,8 +12,14 @@ const requestsCounter = new client.Counter({
     labelNames: ['method', 'route', 'status_code']
 });
 
+const activeRequestGauge = new client.Gauge({
+    name:'active_request',
+    help: 'Number of ative requests',
+});
+
 const requestCountMiddleware = (req: Request, res: Response, next: NextFunction) => {
     const startTime = Date.now();
+    activeRequestGauge.inc();
 
     res.on('finish', () => {
         const endTime = Date.now();
@@ -26,8 +32,11 @@ const requestCountMiddleware = (req: Request, res: Response, next: NextFunction)
         });
     });
 
+    activeRequestGauge.dec();
+
     next();
 };
+
 
 
 const app = express();
