@@ -2,9 +2,15 @@ import express  from "express";
 
 import type { Request, Response, NextFunction } from "express";
 
-import promClient from "prom-client"
 import client from "prom-client"
 
+
+const httpRequestDurationMicroSeconds = new client.Histogram({
+    name: 'http_request_duration_ms',
+    help: 'Duration of HTTP requests in ms',
+    labelNames: ['method', 'route', 'code'],
+    buckets: [0.1, 0.5, 5, 15, 100, 300, 500, 1000, 3000, 5000]
+});
 
 const requestsCounter = new client.Counter({
     name: 'http_requests_total',
@@ -17,7 +23,7 @@ const activeRequestGauge = new client.Gauge({
     help: 'Number of ative requests',
 });
 
-const requestCountMiddleware = (req: Request, res: Response, next: NextFunction) => {
+const metricMiddleware = (req: Request, res: Response, next: NextFunction) => {
     const startTime = Date.now();
     activeRequestGauge.inc();
 
@@ -42,7 +48,7 @@ const requestCountMiddleware = (req: Request, res: Response, next: NextFunction)
 
 
 const app = express();
-app.use(requestCountMiddleware);
+app.use(metricMiddleware);
 app.get("/cpu", async (req, res) => {
 
     await new Promise(s => setTimeout(s, 5000));
