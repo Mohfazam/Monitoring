@@ -36,7 +36,18 @@ const metricMiddleware = (req: Request, res: Response, next: NextFunction) => {
             route: req.route ? req.route.path: req.path,
             status_code: res.statusCode
         });
+
+        httpRequestDurationMicroSeconds.observe({
+        method: req.method,
+        route: req.route ? req.route.path : req.path,
+        code: res.statusCode
+    }, endTime - startTime);
+
+
+
     });
+
+    
 
     res.on("close", () => {
     activeRequestGauge.dec();
