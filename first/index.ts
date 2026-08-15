@@ -84,7 +84,7 @@ app.get("/users", (req, res) => {
     });
 });
 
-app.get("/metric", async (req, res) => {
+app.get("/metrics", async (req, res) => {
     const metrics = await client.register.metrics();
     res.set('Content-Type', client.register.contentType);
     res.end(metrics)
