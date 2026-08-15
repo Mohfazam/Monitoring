@@ -2,21 +2,21 @@ version: '3.8'
 
 services:
   node-app:
-  build:
-  port:
-    - "3000:3000"
-  networks:
-  - monitoring
+    build: .
+    ports:
+      - "3000:3000"
+    networks:
+      - monitoring
 
 
-prometheus:
-  image: prom/prometheus:latest
-  volumes:
-    - ./:/etc/prometheus
-  ports:
-    - "9090:9090"
-  networks:
-    - monitoring
+  prometheus:
+    image: prom/prometheus:latest
+    volumes:
+      - ./:/etc/prometheus
+    ports:
+      - "9090:9090"
+    networks:
+      - monitoring
 
 networks:
   monitoring:
