@@ -17,3 +17,6 @@ prometheus:
     - "9090:9090"
   networks:
     - monitoring
+
+networks:
+  monitoring:
