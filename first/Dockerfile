@@ -1,14 +1,13 @@
-FROM node:20
+FROM oven/bun:1
 
 WORKDIR /usr/src/app
 
-COPY    package.json ./
+COPY    package.json bun.lock ./
 
-RUN npm install
-RUN npm install typescript
+RUN bun install --frozen-lockfile
 
 COPY . .
 
 EXPOSE 3000
 
-CMD [ "npm", "run", "start" ]
+CMD [ "bun", "run", "start" ]
